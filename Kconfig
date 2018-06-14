@@ -13,6 +13,29 @@ config ESPHTTPD_STACK_SIZE
 	help
 		Stack size reserved for the esp-httpd main task plus CGIs.
 
+config ESPHTTPD_PROC_AFFINITY
+	bool "Processor Affinity Support"
+        depends on ESPHTTPD_ENABLED
+	default n
+	help
+		Enable Processor Affinity Support
+
+config ESPHTTPD_PROC_CORE
+	int "Bind to Processor Core"
+        depends on ESPHTTPD_PROC_AFFINITY
+	range 0 1
+	default 0
+	help
+		Select Core 0 or Core 1
+
+config ESPHTTPD_PROC_PRI
+	int "Process Task Priority"
+        depends on ESPHTTPD_ENABLED
+	range 1 17
+	default 4
+	help
+		Set esphttpd Process Task Priority
+
 config ESPHTTPD_SHUTDOWN_SUPPORT
 	bool "Enable shutdown support"
 	depends on ESPHTTPD_ENABLED

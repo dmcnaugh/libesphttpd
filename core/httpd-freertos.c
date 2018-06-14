@@ -693,7 +693,13 @@ HttpdInitStatus ICACHE_FLASH_ATTR httpdFreertosInitEx(HttpdFreertosInstance *pIn
     pthread_create(&thread, NULL, platHttpServerTask, pInstance);
 #else
 #ifdef ESP32
-    xTaskCreate(platHttpServerTask, (const char *)"esphttpd", HTTPD_STACKSIZE, pInstance, 4, NULL);
+#ifndef CONFIG_ESPHTTPD_PROC_CORE
+#define CONFIG_ESPHTTPD_PROC_CORE   tskNO_AFFINITY
+#endif
+#ifndef CONFIG_ESPHTTPD_PROC_PRI
+#define CONFIG_ESPHTTPD_PROC_PRI    4
+#endif
+    xTaskCreatePinnedToCore(platHttpServerTask, (const char *)"esphttpd", HTTPD_STACKSIZE, pInstance, CONFIG_ESPHTTPD_PROC_PRI, NULL, CONFIG_ESPHTTPD_PROC_CORE);
 #else
     xTaskCreate(platHttpServerTask, (const signed char *)"esphttpd", HTTPD_STACKSIZE, pInstance, 4, NULL);
 #endif
