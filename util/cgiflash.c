@@ -68,7 +68,7 @@ CgiStatus ICACHE_FLASH_ATTR cgiGetFirmwareNext(HttpdConnData *connData) {
 	httpdHeader(connData, "Content-Type", "text/plain");
 	httpdHeader(connData, "Content-Length", "9");
 	httpdEndHeaders(connData);
-	char *next = id == 1 ? "user1.bin" : "user2.bin";
+	const char *next = id == 1 ? "user1.bin" : "user2.bin";
 	httpdSend(connData, next, -1);
 	ESP_LOGD(TAG, "Next firmware: %s (got %d)", next, id);
 	return HTTPD_CGI_DONE;
@@ -117,7 +117,7 @@ typedef struct {
 	int address;
 	int len;
 	int skip;
-	char *err;
+	const char *err;
 } UploadState;
 
 #ifndef ESP32
